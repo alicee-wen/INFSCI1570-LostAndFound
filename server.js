@@ -2,11 +2,9 @@
 require('dotenv').config();
 const express = require('express');
 const app = express();
-
-// allow express to read JSON
 app.use(express.json());
 
-// allow express to read form body data (for login/signup)
+// allow form submissions (required for login/signup)
 app.use(express.urlencoded({ extended: true }));
 
 // session + EJS support
@@ -17,19 +15,19 @@ app.set("view engine", "ejs");
 const bcrypt = require('bcrypt');
 const mongoose = require('mongoose');
 
-// Import models
+// Import Mongoose models
 const User = require('./models/user');
 const Post = require('./models/post');
 const Counter = require('./models/counter');
 
-// MongoDB connection
+// --- MongoDB connection using variables from the .env file ---
 const mongoUri = `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@${process.env.HOST}/${process.env.DATABASE}?retryWrites=true&w=majority`;
 
 mongoose.connect(mongoUri)
   .then(() => console.log('Connected to MongoDB'))
   .catch(err => console.error('MongoDB connection error:', err));
 
-// Session middleware (must come after DB connection setup)
+// Session middleware
 app.use(
   session({
     secret: process.env.SESSION_SECRET || "secret",
@@ -41,23 +39,22 @@ app.use(
   })
 );
 
+// Root route
+app.get('/', (req, res) => {
+  res.json({ message: "Please see the README.md for documentation" });
+});
+
 // --- Import and mount MVC/auth routes ---
 const authRoutes = require("./routes/authRoutes");
 const userRoutes = require("./routes/userRoutes");
 
-app.use("/", authRoutes);      // /login, /signup, /logout
-app.use("/users", userRoutes); // /users/profile (MVC page)
-
-// Root route
-app.get('/', (req, res) => {
-  res.json({ message: "See README.md for documentation" });
-});
+app.use("/", authRoutes);
+app.use("/users", userRoutes); // MVC user system (profile, etc.)
 
 // Use PORT from .env, default to 3000
 const PORT = process.env.PORT || 3000;
 
 // ------------------ Helper Functions for ID Generation ------------------
-
 async function generateUserId() {
   const counter = await Counter.findByIdAndUpdate(
     'user',
@@ -76,10 +73,12 @@ async function generatePostId() {
   return `post${counter.seq}`;
 }
 
-// ------------------ USER ROUTES (JSON API) ------------------
+// ------------------ API ROUTES ------------------
+const apiRouter = express.Router();
+app.use("/api", apiRouter);
 
 // GET all users
-app.get('/api/users', async (req, res) => {
+apiRouter.get('/users', async (req, res) => {
   try {
     const users = await User.find();
     res.json(users);
@@ -89,10 +88,10 @@ app.get('/api/users', async (req, res) => {
 });
 
 // GET single user by ID
-app.get('/api/users/:id', async (req, res) => {
+apiRouter.get('/users/:id', async (req, res) => {
   try {
     const user = await User.findById(req.params.id);
-    if (!user) return res.status(404).json({ error: `User '${req.params.id}' not found.` });
+    if (!user) return res.status(404).json({ error: `User '${req.params.id}' was not found.` });
     res.json(user);
   } catch (err) {
     res.status(500).json({ error: 'Server error' });
@@ -100,7 +99,7 @@ app.get('/api/users/:id', async (req, res) => {
 });
 
 // POST new user
-app.post('/api/users', async (req, res) => {
+apiRouter.post('/users', async (req, res) => {
   const { username, email, password } = req.body;
   if (!username || !email || !password) {
     return res.status(400).json({ error: "Missing required fields." });
@@ -109,25 +108,23 @@ app.post('/api/users', async (req, res) => {
   try {
     const password_hash = await bcrypt.hash(password, 12);
     const _id = await generateUserId();
-    const newUser = {
+    const newUser = new User({
       _id,
       username,
       email,
       password_hash,
       date_created: new Date().toISOString()
-    };
+    });
 
-    const userDoc = new User(newUser);
-    await userDoc.save();
-
-    res.status(201).json(userDoc);
+    await newUser.save();
+    res.status(201).json(newUser);
   } catch (err) {
     res.status(500).json({ error: "Failed to create user." });
   }
 });
 
 // PUT update user
-app.put('/api/users/:id', async (req, res) => {
+apiRouter.put('/users/:id', async (req, res) => {
   const { username, email, password } = req.body;
 
   try {
@@ -146,20 +143,19 @@ app.put('/api/users/:id', async (req, res) => {
 });
 
 // DELETE user
-app.delete('/api/users/:id', async (req, res) => {
+apiRouter.delete('/users/:id', async (req, res) => {
   try {
     const deletedUser = await User.findByIdAndDelete(req.params.id);
     if (!deletedUser) return res.status(404).json({ error: `User '${req.params.id}' not found.` });
-    res.json({ message: `User '${req.params.id}' deleted`, user: deletedUser });
+
+    res.json({ message: `User '${req.params.id}' deleted successfully.`, user: deletedUser });
   } catch (err) {
     res.status(500).json({ error: 'Server error' });
   }
 });
 
-// ------------------ POST ROUTES (JSON API) ------------------
-
-// GET all posts
-app.get('/api/posts', async (req, res) => {
+// ------------------ POST ROUTES ------------------
+apiRouter.get('/posts', async (req, res) => {
   try {
     const posts = await Post.find();
     res.json(posts);
@@ -168,8 +164,7 @@ app.get('/api/posts', async (req, res) => {
   }
 });
 
-// GET single post w/author info
-app.get('/api/posts/:id', async (req, res) => {
+apiRouter.get('/posts/:id', async (req, res) => {
   try {
     const post = await Post.findById(req.params.id);
     if (!post) return res.status(404).json({ error: `Post '${req.params.id}' not found.` });
@@ -185,8 +180,7 @@ app.get('/api/posts/:id', async (req, res) => {
   }
 });
 
-// POST new post
-app.post('/api/posts', async (req, res) => {
+apiRouter.post('/posts', async (req, res) => {
   const { author_id, content } = req.body;
   if (!author_id || !content) return res.status(400).json({ error: "Missing required fields." });
 
@@ -209,8 +203,7 @@ app.post('/api/posts', async (req, res) => {
   }
 });
 
-// PUT update post
-app.put('/api/posts/:id', async (req, res) => {
+apiRouter.put('/posts/:id', async (req, res) => {
   const { content } = req.body;
 
   try {
@@ -226,13 +219,12 @@ app.put('/api/posts/:id', async (req, res) => {
   }
 });
 
-// DELETE post
-app.delete('/api/posts/:id', async (req, res) => {
+apiRouter.delete('/posts/:id', async (req, res) => {
   try {
     const deletedPost = await Post.findByIdAndDelete(req.params.id);
     if (!deletedPost) return res.status(404).json({ error: `Post '${req.params.id}' not found.` });
 
-    res.json({ message: `Post '${req.params.id}' deleted`, post: deletedPost });
+    res.json({ message: `Post '${req.params.id}' deleted successfully.`, post: deletedPost });
   } catch (err) {
     res.status(500).json({ error: 'Server error' });
   }
