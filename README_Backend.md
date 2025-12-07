@@ -17,9 +17,18 @@
 * PUT /posts/:id - Changes a post's content. _id, author_id, and date_created cannot be changed. 
 * DELETE /posts/:id - Deletes a specific post from the database. 
 
+# Comments: 
+
+* GET /comments/:id -  Gives a specific comment's _id, author_id, content, date_created, post_id, parent_type, and parent_id. Also includes an “author” object containing the author’s username and email. If the author was deleted, placeholder values are instead returned.
+* GET /comments/:id/replies - Gives a specific comment's descendants arranged in a tree. For each child, gives all of the values that GET /comments/:id gave, including the author object. The root comment itself is not included in the response, only its child comments.
+* POST /comments - Creates a new comment. Takes author_id, content, parent_type, parent_id. _id, post_id, and date_created are automatically assigned.
+* PUT /comments/:id - Changes a comment's content. The following fields cannot be changed: parent_type, parent_id, post_id, author_id, date created, and the comment's own _id.
+* DELETE /comments/:id - Soft-Deletes a specific comment. This removes the comment's content and author_id, but otherwise leaves the comment intact. Full deletion was avoided to preserve comment chains.
+
 # Mixed: 
 
-* GET /users/:id/posts - Gives all posts attributed to that user's id. 
+* GET /posts/:id/comments - Gives all comments under the specified post. This includes comments made directly on the post as well as all nested replies within comment chains under that post.
+* GET /users/:id/posts - Gives all posts attributed to that user's id.
 
 
 ##### Examples ##### 
