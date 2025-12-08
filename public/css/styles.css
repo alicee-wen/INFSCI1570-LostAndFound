@@ -1,0 +1,178 @@
+:root {
+  --primary: #608d66;
+  --bg: #0f172a;
+  --card-bg: #111827;
+  --text: #e5e7eb;
+  --muted: #9ca3af;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    sans-serif;
+  background: var(--bg);
+  color: var(--text);
+}
+
+/* header and footer */
+
+.site-header,
+.site-footer {
+  background: #020617;
+  padding: 0.75rem 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.logo {
+  font-weight: 700;
+}
+
+.site-header nav a {
+  margin-left: 1rem;
+  color: var(--muted);
+  text-decoration: none;
+  font-size: 0.95rem;
+}
+
+.site-header nav a:hover {
+  color: var(--text);
+}
+
+.inline-form {
+  display: inline-block;
+}
+
+.inline-form button {
+  margin-left: 1rem;
+  border-radius: 999px;
+  border: 1px solid var(--muted);
+  background: transparent;
+  color: var(--muted);
+  padding: 0.25rem 0.7rem;
+  cursor: pointer;
+}
+
+.page-content {
+  padding: 1.5rem;
+}
+
+/* Hero */
+
+.home {
+  max-width: 800px;
+  margin: 2rem auto;
+  text-align: center;
+}
+
+.home h1 {
+  font-size: clamp(2rem, 4vw, 2.75rem);
+  margin-bottom: 0.25rem;
+}
+
+.home-subtitle {
+  color: var(--muted);
+  margin-bottom: 1.5rem;
+}
+
+.search-form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+}
+
+.search-form input {
+  padding: 0.5rem 0.75rem;
+  border-radius: 999px;
+  border: 1px solid #374151;
+  background: #020617;
+  color: var(--text);
+  min-width: 180px;
+}
+
+.search-form button {
+  padding: 0.5rem 1rem;
+  border-radius: 999px;
+  border: none;
+  background: var(--primary);
+  color: white;
+  cursor: pointer;
+}
+
+.home-buttons {
+  display: flex;
+  gap: 0.75rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.btn {
+  display: inline-block;
+  padding: 0.6rem 1.1rem;
+  border-radius: 999px;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.btn.primary {
+  background: var(--primary);
+  color: white;
+}
+
+.btn.secondary {
+  border: 1px solid #374151;
+  color: var(--text);
+}
+
+/* Recent posts */
+
+.recent-posts {
+  max-width: 900px;
+  margin: 1.5rem auto 3rem;
+}
+
+.post-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.post-card {
+  background: var(--card-bg);
+  padding: 1rem;
+  border-radius: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.post-meta {
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+/* Utility */
+
+.muted {
+  color: var(--muted);
+}
+
+/*  breakpoints */
+
+@media (max-width: 640px) {
+  .site-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+
+  .search-form {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}

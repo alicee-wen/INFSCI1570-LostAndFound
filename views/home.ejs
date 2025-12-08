@@ -1,12 +1,56 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html>
   <head>
-    <title>Lost and Found</title>
+    <title>Lost and Found!</title>
     <link rel="stylesheet" href="/css/styles.css">
   </head>
   <body>
     <h1>Lost and Found</h1>
-    <p>Hello</p>
+    <p id="welcome-banner">Hello</p>
     <script src="/js/main.js"></script>
   </body>
-</html>
+</html> -->
+
+<%- include('misc/header') %>
+
+<section class="hero">
+  <h1>Find lost items near you!</h1>
+  <p class="hero-subtitle">
+    Post lost items, search by location, and reconnect people with their stuff.
+  </p>
+
+  <div id="welcome-banner"></div>
+
+  <form action="/api/posts" method="GET" class="search-form">
+    <input type="text" name="q" placeholder="Search by title or description..." />
+    <input type="text" name="location" placeholder="Location or building..." />
+    <button type="submit">Search</button>
+  </form>
+
+  <div class="hero-actions">
+    <a href="/signup" class="btn primary">Get started</a>
+    <a href="/login" class="btn secondary">Log in</a>
+  </div>
+</section>
+
+<section class="recent-posts">
+  <h2>Recent Posts</h2>
+
+  <% if (posts && posts.length > 0) { %>
+    <ul class="post-list">
+      <% posts.forEach(post => { %>
+        <li class="post-card">
+          <h3><%= post.content %></h3>
+          <p class="post-meta">
+            Posted by <%= post.author_id %> on
+            <%= new Date(post.date_created).toLocaleString() %>
+          </p>
+        </li>
+      <% }) %>
+    </ul>
+  <% } else { %>
+    <p class="muted">No posts yet.</p>
+  <% } %>
+</section>
+
+<%- include('misc/footer') %>

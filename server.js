@@ -3,14 +3,19 @@ require('dotenv').config();
 const express = require('express');
 const app = express();
 app.use(express.json());
+const path = require("path");
 
 // allow form submissions (required for login/signup)
 app.use(express.urlencoded({ extended: true }));
+
+//
+app.use(express.static(path.join(__dirname, 'public')));
 
 // session + EJS support
 const session = require("express-session");
 const MongoStore = require("connect-mongo");
 app.set("view engine", "ejs");
+app.set("views", __dirname + "/views/");
 
 const bcrypt = require('bcrypt');
 const mongoose = require('mongoose');
@@ -40,14 +45,33 @@ app.use(
   })
 );
 
-// Root route
-app.get('/', (req, res) => {
-  res.json({ message: "Please see the README.md for documentation" });
+
+// make userId available in all EJS templates
+app.use((req, res, next) => {
+  res.locals.userId = req.session.userId || null;
+  next();
 });
+
+// Root route
+// app.get('/', (req, res) => {
+//   // res.json({ message: "Please see the README.md for documentation" });
+//   res.render('home', {
+//     // you can pass data to the template here
+//     userId: req.session.userId || null
+//   });
+// });
+
+
+// Frontend routes
+const frontendRouter = require("./routes/frontend");
+
 
 // --- Import and mount MVC/auth routes ---
 const authRoutes = require("./routes/authRoutes");
 const userRoutes = require("./routes/userRoutes");
+
+// frontend pages
+app.use("/", frontendRouter);
 
 app.use("/", authRoutes);
 app.use("/users", userRoutes); // MVC user system (profile, etc.)
@@ -519,5 +543,5 @@ app.get('/users/:id/posts', async (req, res) => {
 
 // ------------------ Start server ------------------
 const listener = app.listen(PORT, () => {
-  console.log('Your app is listening on port ' + listener.address().port);
+  console.log('Your app is listening on port ' + PORT);
 });

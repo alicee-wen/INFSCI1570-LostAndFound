@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Lost &amp; Found</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="/css/styles.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="logo">Lost &amp; Found</div>
+      <nav>
+        <a href="/">Home</a>
+        <a href="/posts">Search</a>
+        <% if (userId) { %>
+          <a href="/users/<%= userId %>/posts">My Posts</a>
+          <a href="/users/profile">Profile</a>
+          <form action="/logout" method="POST" class="inline-form">
+            <button>Logout</button>
+          </form>
+        <% } else { %>
+          <a href="/login">Login</a>
+          <a href="/signup">Sign Up</a>
+        <% } %>
+      </nav>
+    </header>
+    <main class="page-content">
