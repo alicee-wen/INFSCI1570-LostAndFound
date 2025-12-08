@@ -1,7 +1,7 @@
 <%- include("../misc/header") %>
 
-<section class="container">
-  <h1>Edit Post</h1>
+<section class="edit-post-page">
+  <h1 class="heading2">Edit Post</h1>
 
   <form action="/posts/<%= post._id %>/edit" method="POST" class="form">
     <div class="form-group">
@@ -17,8 +17,7 @@
 
     <div class="form-group">
       <label for="description">Description*</label>
-      <textarea id="description" name="description" rows="4" required>
-<%= post.description %>
+      <textarea id="description" name="description" rows="4" required><%= post.description %>
       </textarea>
     </div>
 
@@ -50,8 +49,8 @@
       </select>
     </div>
 
-    <button type="submit" class="btn btn-primary">Save Changes</button>
-    <a href="/posts/<%= post._id %>" class="btn btn-secondary">Cancel</a>
+    <button type="submit" class="btn btn-a">Save Changes</button>
+    <a href="/posts/<%= post._id %>" class="btn text-button-light">Cancel</a>
   </form>
 </section>
 

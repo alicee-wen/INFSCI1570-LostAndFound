@@ -13,9 +13,8 @@
 
 
 :root {
-  --primary: #608d66;
+  --primary: #276874;
   --bg: #4f5e83;
-  --card-bg: #111827;
   --text: #e5e7eb;
   --muted: #9ca3af;
 }
@@ -89,10 +88,11 @@ body {
   margin-bottom: 0.25rem;
 }
 
-.home-subtitle {
+.home-subtitle, #profile-welcome {
   color: var(--muted);
   font-size: 1.5rem;
   margin-bottom: 5rem;
+  text-align: center;
 }
 
 .search-form {
@@ -104,23 +104,29 @@ body {
 }
 
 .search-form input {
-  padding: 0.5rem 0.75rem;
-  border-radius: 999px;
-  border: 1px solid #374151;
+  padding: 1rem 2rem;
+  border-radius: 1000px;
+  /* border: 1px solid #374151; */
   background: #020617;
   color: var(--text);
   min-width: 180px;
+  font-size: 1rem;
+  text-align: center;
 }
 
-.search-form button {
+.search-form button, #post-create {
   padding: 0.5rem 1rem;
-  border-radius: 999px;
-  border: none;
+  border-radius: 1000px;
+  border: solid 1px #09353d;
   background: var(--primary);
   color: white;
   cursor: pointer;
 }
 
+#post-create {
+  margin-top: 3rem;
+  margin-bottom: 4rem;
+}
 .home-buttons {
   display: flex;
   gap: 0.75rem;
@@ -131,7 +137,7 @@ body {
 .btn {
   display: inline-block;
   padding: 0.6rem 1.1rem;
-  border-radius: 999px;
+  border-radius: 1000px;
   text-decoration: none;
   font-weight: 500;
 }
@@ -142,11 +148,25 @@ body {
 }
 
 .btn.secondary {
-  border: 1px solid #374151;
+  border: 1px solid #526077;
   color: var(--text);
 }
 
 /* Recent posts */
+
+.posts-page h1, .login-page h1, .signup-page h1, .profile-page h1, .create-post-page h1  {
+  text-align: center;
+  font-size: 5rem;
+  margin-bottom: 3rem;
+  
+}
+
+.posts-page h2{
+  margin-top: 3rem;
+  margin-bottom: 1rem;
+  font-size: 2rem;
+  text-align: center;
+}
 
 .recent-posts {
   max-width: 900px;
@@ -160,15 +180,15 @@ body {
 }
 
 .post-card {
-  background: var(--card-bg);
+  background: #b1b1b1;
   padding: 1rem;
   border-radius: 0.75rem;
   margin-bottom: 0.75rem;
 }
 
-.post-meta {
-  color: var(--muted);
-  font-size: 0.85rem;
+.post-info {
+  color: rgb(11, 19, 41);
+  font-size: 0.9rem;
 }
 
 /* Utility */
@@ -176,6 +196,109 @@ body {
 .muted {
   color: var(--muted);
 }
+
+.text-button-light {
+  border: none;
+  color: var(--text);
+  cursor: pointer;
+  font-size: 1rem;
+  text-decoration: underline;
+}
+
+.text-button-dark {
+  border: none;
+  color: var(--bg);
+  cursor: pointer;
+  font-size: 1rem;
+  text-decoration: underline;
+}
+
+/* login/signup input */
+
+.auth-form input {
+  display: flex;
+  
+  padding: 0.75rem 1rem;
+  margin-bottom: 1rem;
+  border-radius: 0.5rem;
+  /* border: 1px solid #374151; */
+  background: #020617;
+  color: white;
+  font-size: 1rem;
+}
+
+.login-page button, .signup-page button, .btn-a, #profile-logout {
+  padding: 0.6rem 1.5rem;
+  border-radius: 1000px;
+  border: solid 1px #09353d;
+  background: var(--primary);
+  color: white;
+  cursor: pointer;
+  margin-right: 0.5rem;
+}
+
+/* show post page + edit post page */
+.show-post-page p, .edit-post-page label, .create-post-page .form-group label {
+  font-size: 2rem;
+  margin-bottom: 2rem;
+}
+
+.edit-post-page label, .create-post-page .form-group label {
+  margin-right: 2rem;
+}
+
+.edit-post-page .form-group, .create-post-page .form-group {
+  margin-bottom: 2rem;
+}
+
+
+#profile-logout{
+  background-color: #8f3a3a;
+}
+
+
+/* profile page */
+#profile-welcome {
+  font-size: 2.5rem;
+  margin-bottom: 4rem;
+}
+
+#profile-first-buttons{
+  margin-right: 2rem;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.profile-page hr{
+  margin-top: 4rem;
+  margin-bottom: 4rem;
+}
+
+#profile-create-first{
+  margin-top: 2rem;
+  margin-bottom: 2rem;;
+}
+
+
+.heading2 {
+  margin-top: 3rem;
+  margin-bottom: 2rem;
+  font-size: 3rem;
+  text-align: center;
+}
+
+
+
+
+
+
+
+
+
+
+
+
 
 /*  breakpoints */
 

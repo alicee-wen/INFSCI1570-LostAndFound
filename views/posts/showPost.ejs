@@ -1,10 +1,10 @@
 <%- include("../misc/header") %>
 
-<section class="container">
+<section class="show-post-page">
   <h1><%= post.title %></h1>
 
-  <p class="meta">
-     <strong>Title:</strong> <%= post.title || "unknown" %><br/>
+  <p class="info">
+    <strong>Title:</strong> <%= post.title || "unknown" %><br/>
     <strong>Status:</strong> <%= post.status || "unknown" %><br/>
     <strong>Category:</strong> <%= post.category || "N/A" %><br/>
     <strong>Location:</strong> <%= post.location || "N/A" %><br/>
@@ -15,10 +15,10 @@
 
 
   <div class="actions">
-    <a href="/posts" class="btn btn-secondary">Back to all posts</a>
+    <a href="/posts" class="btn btn-a">Back</a>
 
 
-    <a href="/posts/<%= post._id %>/edit" class="btn btn-primary">Edit</a>
+    <a href="/posts/<%= post._id %>/edit" class="btn-a ">Edit</a>
 
     <form
       action="/posts/<%= post._id %>/delete"
@@ -26,7 +26,7 @@
       style="display:inline-block"
       onsubmit="return confirm('Are you sure you want to delete this post?');"
     >
-      <button type="submit" class="btn btn-danger">Delete</button>
+      <button type="submit" class="btn btn-a">Delete</button>
     </form>
   </div>
 </section>
