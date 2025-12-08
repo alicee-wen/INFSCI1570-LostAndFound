@@ -13,9 +13,9 @@
 
 <%- include('misc/header') %>
 
-<section class="hero">
+<section class="home">
   <h1>Find lost items near you!</h1>
-  <p class="hero-subtitle">
+  <p class="home-subtitle">
     Post lost items, search by location, and reconnect people with their stuff.
   </p>
 
@@ -27,30 +27,8 @@
     <button type="submit">Search</button>
   </form>
 
-  <div class="hero-actions">
-    <a href="/signup" class="btn primary">Get started</a>
-    <a href="/login" class="btn secondary">Log in</a>
-  </div>
 </section>
 
-<section class="recent-posts">
-  <h2>Recent Posts</h2>
 
-  <% if (posts && posts.length > 0) { %>
-    <ul class="post-list">
-      <% posts.forEach(post => { %>
-        <li class="post-card">
-          <h3><%= post.content %></h3>
-          <p class="post-meta">
-            Posted by <%= post.author_id %> on
-            <%= new Date(post.date_created).toLocaleString() %>
-          </p>
-        </li>
-      <% }) %>
-    </ul>
-  <% } else { %>
-    <p class="muted">No posts yet.</p>
-  <% } %>
-</section>
 
-<%- include('misc/footer') %>
+

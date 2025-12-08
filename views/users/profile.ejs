@@ -7,29 +7,49 @@
 
 <%- include('../misc/header') %>
 
-<section class="profile-page">
-  <h1>Hi! Welcome, <%= user.username %></h1>
-  <p>Email: <%= user.email %></p>
+<section class="container">
+  <div class="profile-card">
+    <h1>Your Profile</h1>
+    <p>Welcome, <%= user.username %>!</p>
+
+
+    <a href="/users/editProfile" class="btn btn-primary">Edit Profile</a>
+    <a href="/logout" class="btn btn-secondary">Log Out</a>
+  </div>
+
+  <hr />
 
   <h2>Your Posts</h2>
+
   <% if (posts && posts.length > 0) { %>
     <ul class="post-list">
       <% posts.forEach(post => { %>
         <li class="post-card">
-          <h3><%= post.title %></h3>
-          <p><strong>Type:</strong> <%= post.type %></p>
-          <p><strong>Location:</strong> <%= post.location %></p>
-          <p><strong>Status:</strong> <%= post.status %></p>
+          <h3>
+            <a href="/posts/<%= post._id %>">
+              <%= post.title %>
+            </a>
+          </h3>
+
+          <p>
+            <strong>Status:</strong> <%= post.status || "N/A" %><br/>
+          </p>
+
+          <a href="/posts/<%= post._id %>/edit" class="btn btn-sm btn-outline">
+            Edit Post
+          </a>
         </li>
       <% }) %>
     </ul>
   <% } else { %>
-    <p>You have no posts yet.</p>
+    <p>You haven’t made any posts yet.</p>
+    <a href="/posts/new" class="btn btn-primary">Create Your First Post</a>
   <% } %>
 
-  <form method="POST" action="/logout">
+    <form method="POST" action="/logout">
     <button>Logout</button>
   </form>
 </section>
 
-<%- include('../misc/footer') %>
+
+

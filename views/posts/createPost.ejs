@@ -1,0 +1,50 @@
+<%- include("../misc/header") %>
+
+<section class="container">
+  <h1>Create Lost/Found Post</h1>
+
+  <form action="/posts/createPost" method="POST" class="form">
+    <div class="form-section">
+      <label for="title">Title*</label>
+      <input type="text" id="title" name="title" required />
+    </div>
+
+    <div class="form-section">
+      <label for="description">Description*</label>
+      <textarea id="description" name="description" rows="3" required></textarea>
+    </div>
+
+    <div class="form-section">
+      <label for="category">Category</label>
+      <input
+        type="text"
+        id="category"
+        name="category"
+        placeholder="Electronics, Clothing, etc."
+      />
+    </div>
+
+    <div class="form-section">
+      <label for="location">Location</label>
+      <input
+        type="text"
+        id="location"
+        name="location"
+        placeholder="Hillman Library, Streets, etc."
+      />
+    </div>
+
+    <div class="form-section">
+      <label for="status">Status</label>
+      <select id="status" name="status">
+        <option value="lost">Lost</option>
+        <option value="found">Found</option>
+      </select>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Create Post</button>
+    <a href="/posts" class="btn btn-secondary">Cancel</a>
+  </form>
+</section>
+
+

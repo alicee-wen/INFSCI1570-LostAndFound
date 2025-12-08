@@ -9,6 +9,7 @@ const path = require("path");
 app.use(express.urlencoded({ extended: true }));
 
 //
+
 app.use(express.static(path.join(__dirname, 'public')));
 
 // session + EJS support
@@ -56,11 +57,14 @@ app.use((req, res, next) => {
 // app.get('/', (req, res) => {
 //   // res.json({ message: "Please see the README.md for documentation" });
 //   res.render('home', {
-//     // you can pass data to the template here
 //     userId: req.session.userId || null
 //   });
 // });
 
+// app.get("/ping", (req, res) => {
+//   console.log("GET /ping hit");
+//   res.send("ping");
+// });
 
 // Frontend routes
 const frontendRouter = require("./routes/frontend");
@@ -69,15 +73,19 @@ const frontendRouter = require("./routes/frontend");
 // --- Import and mount MVC/auth routes ---
 const authRoutes = require("./routes/authRoutes");
 const userRoutes = require("./routes/userRoutes");
+const postRoutes = require("./routes/postRoutes");
+
+
 
 // frontend pages
 app.use("/", frontendRouter);
 
+app.use("/posts", postRoutes); // MVC post system
 app.use("/", authRoutes);
 app.use("/users", userRoutes); // MVC user system (profile, etc.)
 
 // Use PORT from .env, default to 3000
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3001;
 
 // ------------------ Helper Functions for ID Generation ------------------
 async function generateUserId() {

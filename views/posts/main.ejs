@@ -1,0 +1,36 @@
+<%- include("../misc/header") %>
+
+<section class="container">
+  <h1>Posts</h1>
+
+  <div class="actions">
+    <a href="/posts/createPost" class="btn btn-primary">Create New Post</a>
+  </div>
+
+  <% if (posts && posts.length > 0) { %>
+    <ul class="post-list">
+      <% posts.forEach(post => { %>
+        <li class="post-card">
+          <h2>
+            <a href="/posts/<%= post._id %>">
+              <%= post.title %>
+            </a>
+          </h2>
+
+          <p class="meta">
+            <strong>Status:</strong> <%= post.status || "unknown" %> |
+            <strong>Category:</strong> <%= post.category || "N/A" %> |
+            <strong>Location:</strong> <%= post.location || "N/A" %>
+          </p>
+
+          <a href="/posts/<%= post._id %>" class="btn btn-sm btn-outline">
+            View Details
+          </a>
+        </li>
+      <% }); %>
+    </ul>
+  <% } else { %>
+    <p>No posts yet.</p>
+  <% } %>
+</section>
+
