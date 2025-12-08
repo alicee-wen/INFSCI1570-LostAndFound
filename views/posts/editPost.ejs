@@ -3,7 +3,7 @@
 <section class="edit-post-page">
   <h1 class="heading2">Edit Post</h1>
 
-  <form action="/posts/<%= post._id %>/edit" method="POST" class="form">
+  <form action="/posts/<%= post._id %>/edit" method="POST" enctype="multipart/form-data"  class="form">
     <div class="form-group">
       <label for="title">Title*</label>
       <input

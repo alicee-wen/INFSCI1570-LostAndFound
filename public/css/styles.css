@@ -224,7 +224,7 @@ body {
 
 /* login/signup input */
 
-.auth-form input {
+.auth-form input, .edit-profile-page input {
   display: flex;
   
   padding: 0.75rem 1rem;
@@ -236,7 +236,7 @@ body {
   font-size: 1rem;
 }
 
-.login-page button, .signup-page button, .btn-a, #profile-logout {
+.login-page button, .signup-page button, .btn-a, #profile-logout,  #edit-profile-save {
   padding: 0.6rem 1.5rem;
   border-radius: 1000px;
   border: solid 1px #09353d;
@@ -260,7 +260,7 @@ body {
 
 
 
-.show-post-page p, .edit-post-page label, .create-post-page .form-group label {
+.show-post-page p, .edit-post-page label, .create-post-page .form-group label, .edit-profile-page label {
   font-size: 2rem;
   margin-bottom: 2rem;
 }
@@ -348,9 +348,25 @@ body {
 
 
 
+/* edit profile page */
+.edit-profile-page h1{
+  text-align: center;
+  font-size: 3rem;
+  margin-bottom: 3rem;
+}
 
+.edit-profile-page label {
+  margin-right: 2rem;
+  margin-bottom:4rem;
+}
 
+#edit-profile-save {
+  margin-top: 1rem;
+}
 
+.edit-profile-page input{
+  margin-top: 1rem;
+}
 
 
 

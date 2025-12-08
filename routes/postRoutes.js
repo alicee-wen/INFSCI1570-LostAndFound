@@ -106,10 +106,10 @@ router.get("/:id/edit", async (req, res) => {
   }
 });
 
-// edit form submission
-router.post("/:id/edit", async (req, res) => {
+// edit post
+router.post("/:id/edit", upload.single("photo"), async (req, res) => {
   try {
-    const { title, description, category, location, status } = req.body;
+    const { title, description, category, location, status, photo_url } = req.body;
 
     const post = await Post.findById(req.params.id);
     if (!post) return res.status(404).send("Post not found.");
@@ -117,8 +117,12 @@ router.post("/:id/edit", async (req, res) => {
     post.title = title;
     post.description = description;
     post.category = category;
-    post.location = location;
-    post.status = status;
+    post.location_found = location;
+    post.status = status || "lost";
+
+    if (req.file) {
+        post.photo_url = `/uploads/${req.file.filename}`;
+    }
 
 
     await post.save();

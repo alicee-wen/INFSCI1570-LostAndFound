@@ -1,6 +1,6 @@
 <%- include("../misc/header") %>
 
-<section class="container">
+<section class="edit-profile-page">
   <h1>Edit Profile</h1>
 
   <form action="/users/editProfile" method="POST" class="form">
@@ -36,8 +36,8 @@
       />
     </div>
 
-    <button type="submit" class="btn btn-primary">Save Changes</button>
-    <a href="/users/profile" class="btn btn-secondary">Cancel</a>
+    <button type="submit" class="btn" id="edit-profile-save">Save Changes</button>
+    <a href="/users/profile" class="btn text-button-light">Cancel</a>
   </form>
 </section>
 
