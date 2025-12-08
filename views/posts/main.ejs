@@ -4,7 +4,7 @@
   <h1>Posts</h1>
 
   <div class="actions">
-    <a href="/posts/createPost" class="btn btn-primary" id="post-create">Create New Post</a>
+    <a href="/posts/new" class="btn btn-primary" id="post-create">Create New Post</a>
   </div>
 
 
@@ -12,20 +12,18 @@
     <ul class="post-list">
       <% posts.forEach(post => { %>
         <li class="post-card">
-          <h2>
-            <a href="/posts/<%= post._id %>">
-              <%= post.title %>
-            </a>
+          <h2 class="post-card-title">
+            <a id = "main-post-title" href="/posts/<%= post._id %>"><%= post.title %></a>
           </h2>
 
           <p class="post-info">
-            <strong>Status:</strong> <%= post.status || "unknown" %> |
-            <strong>Category:</strong> <%= post.category || "N/A" %> |
-            <strong>Location:</strong> <%= post.location || "N/A" %>
+            <strong>Status:</strong> <%= post.status || "lost" %> <br>
+            <strong>Category:</strong> <%= post.category || "N/A" %> <br>
+            <strong>Location:</strong> <%= post.location || "N/A" %><br>
           </p>
 
           <a href="/posts/<%= post._id %>" class="btn text-button-dark">
-            View Details
+            View Post
           </a>
         </li>
       <% }); %>

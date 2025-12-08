@@ -1,15 +1,22 @@
 <%- include("../misc/header") %>
 
 <section class="show-post-page">
-  <h1><%= post.title %></h1>
+  <h1 id="show-post-title"><%= post.title %></h1>
 
   <p class="info">
-    <strong>Title:</strong> <%= post.title || "unknown" %><br/>
-    <strong>Status:</strong> <%= post.status || "unknown" %><br/>
-    <strong>Category:</strong> <%= post.category || "N/A" %><br/>
-    <strong>Location:</strong> <%= post.location || "N/A" %><br/>
-    <strong>Date:</strong> <%= post.date || "N/A" %><br/>
-    <p class="description"> <%= post.description %> </p>
+    <strong class="line">Status:</strong> <%= post.status || "lost" %><br/>
+    <strong class="line">Category:</strong> <%= post.category || "N/A" %><br/>
+    <strong class="line">Location:</strong> <%= post.location || "N/A" %><br/>
+    <strong class="line">Date:</strong> <%= post.date || "N/A" %><br/>
+    <strong class="line">Description:</strong> <%= post.description || "N/A" %> <br/>
+
+    <% if (post.photo_url) { %>
+    <img 
+      src="<%= post.photo_url %>" 
+      alt="Image of lost item" 
+      style="max-width: 300px; margin-bottom: 20px; border-radius: 8px;"
+    />
+    <% } %>
   </p>
 
 

@@ -4,11 +4,12 @@ const express = require('express');
 const app = express();
 app.use(express.json());
 const path = require("path");
+app.use("/uploads", express.static("uploads"));
 
 // allow form submissions (required for login/signup)
 app.use(express.urlencoded({ extended: true }));
 
-//
+
 
 app.use(express.static(path.join(__dirname, 'public')));
 

@@ -48,6 +48,11 @@
         <option value="found" <%= post.status === "found" ? "selected" : "" %>>Found</option>
       </select>
     </div>
+    
+     <div class="form-group">
+         <label>Upload Image</label>
+        <input type="file" name="photo" accept="image/*" />
+     </div>
 
     <button type="submit" class="btn btn-a">Save Changes</button>
     <a href="/posts/<%= post._id %>" class="btn text-button-light">Cancel</a>

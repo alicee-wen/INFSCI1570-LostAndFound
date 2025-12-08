@@ -33,11 +33,12 @@
             <a href="/posts/<%= post._id %>"><%= post.title %></a>
           </h3>
 
-          <p>
+          <p id="profile-post-list-details">
+            <strong>Description:</strong> <%= post.description || "N/A" %><br/>
             <strong>Status:</strong> <%= post.status || "N/A" %><br/>
           </p>
 
-          <a href="/posts/<%= post._id %>/edit" class="btn btn-a">
+          <a href="/posts/<%= post._id %>/edit" class="btn " id="profile-edit-post">
             Edit Post
           </a>
         </li>

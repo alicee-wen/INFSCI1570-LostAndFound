@@ -17,6 +17,7 @@
   --bg: #4f5e83;
   --text: #e5e7eb;
   --muted: #9ca3af;
+  --darktext: #17223b;
 }
 
 * {
@@ -168,6 +169,8 @@ body {
   text-align: center;
 }
 
+
+
 .recent-posts {
   max-width: 900px;
   margin: 1.5rem auto 3rem;
@@ -180,7 +183,7 @@ body {
 }
 
 .post-card {
-  background: #b1b1b1;
+  background: #d3d2d2;
   padding: 1rem;
   border-radius: 0.75rem;
   margin-bottom: 0.75rem;
@@ -188,9 +191,14 @@ body {
 
 .post-info {
   color: rgb(11, 19, 41);
-  font-size: 0.9rem;
+  font-size: 1.5rem;
 }
 
+.post-image{
+  max-width: 300px; 
+  margin-bottom: 20px; 
+  border-radius: 8px;
+}
 /* Utility */
 
 .muted {
@@ -238,6 +246,19 @@ body {
 }
 
 /* show post page + edit post page */
+
+#show-post-title{
+  font-size: 3rem;
+  margin-bottom: 2rem;
+  text-decoration: underline;
+}
+
+.show-post-page strong{
+  margin-bottom: 3rem;
+}
+
+
+
 .show-post-page p, .edit-post-page label, .create-post-page .form-group label {
   font-size: 2rem;
   margin-bottom: 2rem;
@@ -250,6 +271,20 @@ body {
 .edit-post-page .form-group, .create-post-page .form-group {
   margin-bottom: 2rem;
 }
+
+.post-card-title a{
+  margin-top: 0rem;
+  margin-bottom: 3rem;
+  color: black;
+  text-align: left;
+
+}
+
+.post-card-title h2{
+  text-align: left;
+  margin-bottom: 3rem;
+}
+
 
 
 #profile-logout{
@@ -280,7 +315,27 @@ body {
   margin-bottom: 2rem;;
 }
 
+.profile-page h2{
+  margin-top: 3rem;
+  margin-bottom: 2rem;
+  font-size: 2.5rem;
+  text-align: left;
+}
+.profile-page h3 a{
+  color:black;
+  font-size: 1.8rem;
+}
 
+#profile-post-list-details{
+  font-size: 1rem;
+  color: var(--darktext)
+}
+
+#profile-edit-post{
+  color: var(--primary);
+  font-weight: bold;
+  text-decoration: underline;
+}
 .heading2 {
   margin-top: 3rem;
   margin-bottom: 2rem;

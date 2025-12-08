@@ -2,6 +2,21 @@
 const express = require("express");
 const router = express.Router();
 const Post = require("../models/post");
+const Counter = require('../models/counter');
+const multer = require("multer");
+const path = require("path");
+
+// multer storage 
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, "uploads/");
+  },
+  filename: (req, file, cb) => {
+    cb(null, Date.now() + path.extname(file.originalname));
+  }
+});
+
+const upload = multer({ storage });
 
 // list all posts (Posts home page)
 router.get("/", async (req, res) => {
@@ -26,18 +41,26 @@ router.get("/new", (req, res) => {
 });
 
 // create new post submission
-router.post("/new", async (req, res) => {
+router.post("/new", upload.single("photo"), async (req, res) => {
   try {
-    const { title, description, category, location, status } = req.body;
+    const { title, description, category, location, status, photo_url } = req.body;
+
+    if (!title || !description) {
+      return res.status(400).send("Title and description are required.");
+    }
+    const _id = await generatePostId();
+
 
     const newPost = new Post({
+        _id,
       title,
       description,
       category,
-      location,
-      status, // e.g. "lost" or "found"
-      author_id: req.session.userId || null,  
-      date_created: new Date().toISOString()
+      location_found: location,
+      status: status || "lost",
+      author_id: req.session.userId || "guest",  
+      date_created: new Date().toISOString(),
+      photo_url: photo_url || "",
     });
 
     await newPost.save();
@@ -94,6 +117,7 @@ router.post("/:id/edit", async (req, res) => {
     post.location = location;
     post.status = status;
 
+
     await post.save();
     res.redirect(`/posts/${post._id}`);
   } catch (err) {
@@ -114,3 +138,17 @@ router.post("/:id/delete", async (req, res) => {
 });
 
 module.exports = router;
+
+
+// helper 
+
+
+
+async function generatePostId() {
+  const counter = await Counter.findByIdAndUpdate(
+    'post',
+    { $inc: { seq: 1 } },
+    { new: true, upsert: true }
+  );
+  return `post${counter.seq}`;
+}

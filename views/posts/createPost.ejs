@@ -3,7 +3,7 @@
 <section class="create-post-page">
   <h1>Create Post</h1>
 
-  <form action="/posts/createPost" method="POST" class="form">
+  <form action="/posts/new" method="POST" enctype="multipart/form-data" class="form">
     <div class="form-group">
       <label for="title">Title*</label>
       <input type="text" id="title" name="title" required />
@@ -41,6 +41,13 @@
         <option value="found">Found</option>
       </select>
     </div>
+
+     <div class="form-group">
+         <label>Upload Image</label>
+        <input type="file" name="photo" accept="image/*" />
+     </div>
+   
+
 
     <button type="submit" class="btn btn-a">Create Post</button>
     <a href="/posts" class="btn text-button-light">Cancel</a>
