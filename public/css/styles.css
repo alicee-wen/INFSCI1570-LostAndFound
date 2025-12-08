@@ -195,9 +195,10 @@ body {
 }
 
 .post-image{
-  max-width: 300px; 
+  max-width: 500px; 
   margin-bottom: 20px; 
   border-radius: 8px;
+  margin-top: 3rem;
 }
 /* Utility */
 

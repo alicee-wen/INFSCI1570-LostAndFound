@@ -19,7 +19,7 @@
           <p class="post-info">
             <strong>Status:</strong> <%= post.status || "lost" %> <br>
             <strong>Category:</strong> <%= post.category || "N/A" %> <br>
-            <strong>Location:</strong> <%= post.location || "N/A" %><br>
+            <strong>Location:</strong> <%= post.location_found || "N/A" %><br>
           </p>
 
           <a href="/posts/<%= post._id %>" class="btn text-button-dark">

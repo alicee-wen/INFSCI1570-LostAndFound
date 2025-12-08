@@ -8,13 +8,12 @@ const path = require("path");
 
 // multer storage 
 const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, "uploads/");
-  },
+  destination: "uploads/",
   filename: (req, file, cb) => {
-    cb(null, Date.now() + path.extname(file.originalname));
+    cb(null, file.originalname);
   }
 });
+
 
 const upload = multer({ storage });
 
@@ -24,7 +23,7 @@ router.get("/", async (req, res) => {
     const posts = await Post.find().sort({ date_created: -1 });
 
     res.render("posts/main", {
-      posts,                  // pass list of posts to the template
+      posts,                  
       userId: req.session.userId || null
     });
   } catch (err) {
@@ -50,7 +49,7 @@ router.post("/new", upload.single("photo"), async (req, res) => {
     }
     const _id = await generatePostId();
 
-
+    
     const newPost = new Post({
         _id,
       title,
@@ -60,8 +59,12 @@ router.post("/new", upload.single("photo"), async (req, res) => {
       status: status || "lost",
       author_id: req.session.userId || "guest",  
       date_created: new Date().toISOString(),
-      photo_url: photo_url || "",
     });
+
+
+    if (req.file) {
+    newPost.photo_url = `/uploads/${req.file.filename}`;
+    }
 
     await newPost.save();
     res.redirect("/posts");

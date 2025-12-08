@@ -37,7 +37,7 @@
         type="text"
         id="location"
         name="location"
-        value="<%= post.location || "" %>"
+        value="<%= post.location_found || "" %>"
       />
     </div>
 
@@ -48,7 +48,7 @@
         <option value="found" <%= post.status === "found" ? "selected" : "" %>>Found</option>
       </select>
     </div>
-    
+
      <div class="form-group">
          <label>Upload Image</label>
         <input type="file" name="photo" accept="image/*" />

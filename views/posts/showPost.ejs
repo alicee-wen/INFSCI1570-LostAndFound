@@ -6,15 +6,15 @@
   <p class="info">
     <strong class="line">Status:</strong> <%= post.status || "lost" %><br/>
     <strong class="line">Category:</strong> <%= post.category || "N/A" %><br/>
-    <strong class="line">Location:</strong> <%= post.location || "N/A" %><br/>
-    <strong class="line">Date:</strong> <%= post.date || "N/A" %><br/>
+    <strong class="line">Location:</strong> <%= post.location_found || "N/A" %><br/>
+    <strong class="line">Date:</strong> <%= post.date_created || "N/A" %><br/>
     <strong class="line">Description:</strong> <%= post.description || "N/A" %> <br/>
 
     <% if (post.photo_url) { %>
     <img 
       src="<%= post.photo_url %>" 
       alt="Image of lost item" 
-      style="max-width: 300px; margin-bottom: 20px; border-radius: 8px;"
+      class="post-image"
     />
     <% } %>
   </p>

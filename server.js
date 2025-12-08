@@ -4,7 +4,9 @@ const express = require('express');
 const app = express();
 app.use(express.json());
 const path = require("path");
-app.use("/uploads", express.static("uploads"));
+app.use(express.static("public"));
+// app.use("/uploads", express.static("uploads"));
+
 
 // allow form submissions (required for login/signup)
 app.use(express.urlencoded({ extended: true }));
@@ -12,6 +14,7 @@ app.use(express.urlencoded({ extended: true }));
 
 
 app.use(express.static(path.join(__dirname, 'public')));
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 // session + EJS support
 const session = require("express-session");
