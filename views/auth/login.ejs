@@ -8,9 +8,9 @@
     <p class="error"><%= error %></p>
   <% } %> -->
   <form method="POST" action="/login" class="auth-form">
-    <input name="email" placeholder="Email" required />
+    <input name="email" type = "email" placeholder="Email" required />
 
-   <input type="password" placeholder="Password" required />
+   <input type="password" name = "password" placeholder="Password" required />
     <button type="submit">Login</button>
   </form>
 </section>

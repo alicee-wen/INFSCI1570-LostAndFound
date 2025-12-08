@@ -16,8 +16,6 @@
      
       <a href="/users/editProfile" class="btn btn-a">Edit Profile</a>
 
-      <a href="/logout" class="btn btn-a" id="profile-logout">Log Out</a>
-
     </div>
   </div>
 
@@ -41,6 +39,15 @@
           <a href="/posts/<%= post._id %>/edit" class="btn " id="profile-edit-post">
             Edit Post
           </a>
+
+          <form
+      action="/posts/<%= post._id %>/delete"
+      method="POST"
+      style="display:inline-block"
+      onsubmit="return confirm('Are you sure you want to delete this post?');"
+    >
+      <button type="submit" class="btn btn-a">Delete</button>
+    </form>
         </li>
       <% }) %>
     </ul>

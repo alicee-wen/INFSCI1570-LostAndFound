@@ -50,20 +50,37 @@ module.exports.signup = async (req, res) => {
 };
 
 module.exports.login = async (req, res) => {
+    try {
     const { email, password } = req.body;
 
-    const user = await User.findOne({ email });
-    if (!user) return res.status(400).send("Invalid email or password.");
+    console.log("LOGIN req.body:", req.body);
+    
+    if (!email || !password) {
+      return res.status(400).render("login", {
+        error: "Please enter both email and password.",
+      });
+    }
 
+    // look up user by email
+    const user = await User.findOne({ email });
+
+    // if user doesn't exist or has no password_hash
+    if (!user || !user.password_hash) return res.status(400).send("Invalid email or password.");
+
+    // compare password with stored hash
     const valid = await bcrypt.compare(password, user.password_hash);
     if (!valid) return res.status(400).send("Invalid email or password.");
 
     req.session.userId = user._id;
-    res.redirect("/users/profile");
-};
+    return res.redirect("/users/profile");
+} catch (err) {
+    console.log(err);
+    res.status(500).send("Error logging in.");
+}
+}
 
 module.exports.logout = (req, res) => {
     req.session.destroy(() => {
         res.redirect("/login");
     });
-};
+}

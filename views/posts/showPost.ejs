@@ -25,17 +25,7 @@
   <div class="actions">
     <a href="/posts" class="btn btn-a">Back</a>
 
-
-    <a href="/posts/<%= post._id %>/edit" class="btn-a ">Edit</a>
-
-    <form
-      action="/posts/<%= post._id %>/delete"
-      method="POST"
-      style="display:inline-block"
-      onsubmit="return confirm('Are you sure you want to delete this post?');"
-    >
-      <button type="submit" class="btn btn-a">Delete</button>
-    </form>
+    
   </div>
 </section>
 
