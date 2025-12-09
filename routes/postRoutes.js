@@ -49,7 +49,7 @@ router.post("/new", upload.single("photo"), async (req, res) => {
     }
     const _id = await generatePostId();
 
-    
+       
     const newPost = new Post({
         _id,
       title,
