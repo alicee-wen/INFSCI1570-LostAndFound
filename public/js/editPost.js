@@ -1,13 +1,13 @@
 
 document.addEventListener("DOMContentLoaded", () => {
-  const form = document.getElementById("create-post-form");
+  const form = document.getElementById("edit-post-form");
   if (!form) {
     return;
   }
 
-  const useLocationBtn = document.getElementById("use-location-btn");
-  const locationInput = document.getElementById("location");
-  const locationStatus = document.getElementById("location-status");
+  const useLocationBtn = document.getElementById("use-location-btn-edit");
+  const locationInput = document.getElementById("location-edit");
+  const locationStatus = document.getElementById("location-status-edit");
 
   const STORAGE_KEY = "lost_found_post_draft";
 

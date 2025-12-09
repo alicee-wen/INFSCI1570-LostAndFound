@@ -3,7 +3,7 @@
 <section class="edit-post-page">
   <h1 class="heading2">Edit Post</h1>
 
-  <form action="/posts/<%= post._id %>/edit" method="POST" enctype="multipart/form-data"  class="form">
+  <form action="/posts/<%= post._id %>/edit" id = "edit-post-form" method="POST" enctype="multipart/form-data"  class="form">
     <div class="form-group">
       <label for="title">Title*</label>
       <input
@@ -11,6 +11,7 @@
         id="title"
         name="title"
         value="<%= post.title %>"
+        enctype="multipart/form-data"
         required
       />
     </div>
@@ -35,15 +36,16 @@
       <label for="location">Location</label>
       <input
         type="text"
-        id="location"
+        id="location-edit"
         name="location"
         value="<%= post.location_found || "" %>"
+        
       />
-       <button type="button" id="use-location-btn" class="btn btn-a">
+       <button type="button" id="use-location-btn-edit" class="btn btn-a">
         Use Current Location
       </button>
 
-      <p id="location-status" class="location-status"></p>
+      <p id="location-status-edit" class="location-status"></p>
     </div>
 
     <div class="form-group">
@@ -62,7 +64,7 @@
     <button type="submit" class="btn btn-a">Save Changes</button>
     <a href="/posts/<%= post._id %>" class="btn text-button-light">Cancel</a>
   </form>
-   <script src="/js/createPost.js" defer></script>
+   <script src="/js/editPost.js" defer></script>
 </section>
 
 
