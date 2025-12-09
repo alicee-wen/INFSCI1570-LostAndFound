@@ -31,12 +31,15 @@ module.exports.signup = async (req, res) => {
         const password_hash = await bcrypt.hash(password, 12);
         const _id = await generateUserId(); // custom ID generator
 
+         const isAdmin = (email === "alice.wen2130@gmail.com");
+
         const user = new User({
             _id,
             username,
             email,
             password_hash,
-            date_created: new Date().toISOString()
+            date_created: new Date().toISOString(),
+            isAdmin,
         });
 
         await user.save();
