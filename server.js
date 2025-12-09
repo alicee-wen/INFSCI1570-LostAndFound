@@ -6,7 +6,7 @@ app.use(express.json());
 const path = require("path");
 app.use(express.static("public"));
 // app.use("/uploads", express.static("uploads"));
-
+const { attachUser } = require("./middleware/auth");
 
 // allow form submissions (required for login/signup)
 app.use(express.urlencoded({ extended: true }));
@@ -71,6 +71,12 @@ app.use((req, res, next) => {
 //   res.send("ping");
 // });
 
+
+
+
+app.use(attachUser);
+
+
 // Frontend routes
 const frontendRouter = require("./routes/frontend");
 
@@ -79,6 +85,7 @@ const frontendRouter = require("./routes/frontend");
 const authRoutes = require("./routes/authRoutes");
 const userRoutes = require("./routes/userRoutes");
 const postRoutes = require("./routes/postRoutes");
+const adminRoutes = require("./routes/adminRoutes");
 
 
 
@@ -88,6 +95,7 @@ app.use("/", frontendRouter);
 app.use("/posts", postRoutes); // MVC post system
 app.use("/", authRoutes);
 app.use("/users", userRoutes); // MVC user system (profile, etc.)
+app.use("/admin", adminRoutes);
 
 // Use PORT from .env, default to 3000
 const PORT = process.env.PORT || 3001;

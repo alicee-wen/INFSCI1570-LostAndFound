@@ -1,0 +1,30 @@
+<%- include("../misc/header") %>
+
+<section class="container">
+  <h1>Admin Dashboard: All Users</h1>
+
+  <p>Logged in as: <%=  user.username %> (admin)</p>
+
+  <table class="table">
+    <thead>
+      <tr>
+        <th>_id</th>
+        <th>Username</th>
+        <th>Email</th>
+        <th>Date Created</th>
+        <th>Is Admin?</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% users.forEach(u => { %>
+        <tr>
+          <td><%= u._id %></td>
+          <td><%= u.username %></td>
+          <td><%= u.email %></td>
+          <td><%= u.date_created %></td>
+          <td><%= u.isAdmin ? "Yes" : "No" %></td>
+        </tr>
+      <% }) %>
+    </tbody>
+  </table>
+</section>

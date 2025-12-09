@@ -13,6 +13,7 @@
     <header class="header">
       <div class="title">Lost and Found</div>
       <nav>
+        
         <a href="/">Search</a>
         <a href="/posts">Posts</a>
         <% if (userId) { %>
@@ -24,6 +25,10 @@
           <a href="/login">Login</a>
           <a href="/signup">Sign Up</a>
         <% } %>
+        <% if (user && user.isAdmin) { %>
+  <a href="/admin/users">Admin Dashboard</a>
+<% } %>
+
       </nav>
     </header>
     <main class="page-content">

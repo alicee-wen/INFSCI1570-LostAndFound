@@ -31,12 +31,17 @@ module.exports.signup = async (req, res) => {
         const password_hash = await bcrypt.hash(password, 12);
         const _id = await generateUserId(); // custom ID generator
 
+         const isAdmin = (email === "alice.wen2130@gmail.com"); 
+         // made myself admin to test site because I don't have access to database, 
+         // obviously wouldn't keep this in the real deployed app
+
         const user = new User({
             _id,
             username,
             email,
             password_hash,
-            date_created: new Date().toISOString()
+            date_created: new Date().toISOString(),
+            isAdmin,
         });
 
         await user.save();
