@@ -25,11 +25,20 @@
 * PUT /comments/:id - Changes a comment's content. The following fields cannot be changed: parent_type, parent_id, post_id, author_id, date created, and the comment's own _id.
 * DELETE /comments/:id - Soft-Deletes a specific comment. This removes the comment's content and author_id, but otherwise leaves the comment intact. Full deletion was avoided to preserve comment chains.
 
+# Messages: 
+
+* GET /messages/:id - Gives all of specific message's values. 
+* POST /messages - Creates a new message. Takes sender_id, recipient_id, content. _id and date_created are automatically assigned in the route code. is_read, edited, and date_edited are automatically given default values from the model file. 
+* PUT /messages/:id/read - Changes a message's is_read value from false to true. Makes NO other changes. 
+* PUT /messages/:id/edit - Changes a message's content. Automatically changes the edited value to true and changes the date_edited value to the time that this command is run at. All ids, date_created, and is_read are not changed. 
+* DELETE /messages/:id - Deletes a specific message from the database. 
+
 # Mixed: 
 
-* GET /posts/:id/comments - Gives all comments under the specified post. This includes comments made directly on the post as well as all nested replies within comment chains under that post.
 * GET /users/:id/posts - Gives all posts attributed to that user's id.
-
+* GET /posts/:id/comments - Gives all comments under the specified post. This includes comments made directly on the post as well as all nested replies within comment chains under that post.
+* GET /messages/user/:id - Gives all messages to and from a specific user. These are all messages that this user has had with any other user, not just a conversation with one specific user. 
+* GET /messages/conversation/:user1/:user2 - GET all messages between two specific users.
 
 ##### Examples ##### 
 

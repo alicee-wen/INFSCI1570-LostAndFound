@@ -30,6 +30,7 @@ const User = require('./models/user');
 const Post = require('./models/post');
 const Counter = require('./models/counter');
 const Comment = require('./models/comment');
+const Message = require('./models/message')
 
 // --- MongoDB connection using variables from the .env file ---
 const mongoUri = `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@${process.env.HOST}/${process.env.DATABASE}?retryWrites=true&w=majority`;
@@ -119,11 +120,21 @@ async function generateCommentId() {
   return `comment${counter.seq}`;
 }
 
+async function generateMessageId() {
+  const counter = await Counter.findByIdAndUpdate(
+    'message',
+    { $inc: { seq: 1 } },
+    { new: true, upsert: true }
+  );
+  return `message${counter.seq}`;
+}
 
-// ------------------ API ROUTES ------------------ 
+
+// !!------------------ API ROUTES ------------------!! 
 const apiRouter = express.Router();
 app.use("/api", apiRouter);
 
+// ------------------ USER ROUTES ------------------ 
 // GET all users
 apiRouter.get('/users', async (req, res) => {
   try {
@@ -202,6 +213,8 @@ apiRouter.delete('/users/:id', async (req, res) => {
 });
 
 // ------------------ POST ROUTES ------------------
+
+// GET all post
 apiRouter.get('/posts', async (req, res) => {
   try {
     const posts = await Post.find();
@@ -211,6 +224,7 @@ apiRouter.get('/posts', async (req, res) => {
   }
 });
 
+// GET a specific post
 apiRouter.get('/posts/:id', async (req, res) => {
   try {
     const post = await Post.findById(req.params.id);
@@ -227,6 +241,7 @@ apiRouter.get('/posts/:id', async (req, res) => {
   }
 });
 
+// POST a new post
 apiRouter.post('/posts', async (req, res) => {
   const { author_id, content } = req.body;
   if (!author_id || !content) return res.status(400).json({ error: "Missing required fields." });
@@ -250,6 +265,7 @@ apiRouter.post('/posts', async (req, res) => {
   }
 });
 
+// PUT (update) a post. 
 apiRouter.put('/posts/:id', async (req, res) => {
   const { content } = req.body;
 
@@ -266,6 +282,7 @@ apiRouter.put('/posts/:id', async (req, res) => {
   }
 });
 
+// DELETE a post. 
 apiRouter.delete('/posts/:id', async (req, res) => {
   try {
     const deletedPost = await Post.findByIdAndDelete(req.params.id);
@@ -489,8 +506,156 @@ apiRouter.delete('/comments/:id', async (req, res) => {
   }
 });
 
+// ------------------ DIRECT USER-TO-USER MESSAGES ROUTES ------------------
+
+// GET one specific message. 
+apiRouter.get('/messages/:id', async (req, res) => {
+  try {
+    const msg = await Message.findById(req.params.id);
+
+    if (!msg) {
+      return res.status(404).json({ error: `Message '${req.params.id}' not found.` });
+    }
+
+    res.json(msg);
+
+  } catch (err) {
+    res.status(500).json({ error: "Server error" });
+  }
+});
+
+// POST a new message.
+apiRouter.post('/messages', async (req, res) => {
+  const { sender_id, recipient_id, content } = req.body;
+
+  if (!sender_id || !recipient_id || !content) {
+    return res.status(400).json({ error: "Missing required fields." });
+  }
+
+  try {
+    // Make sure sender and recipient are different users
+    if (sender_id === recipient_id) {
+      return res.status(400).json({ error: "Users cannot send messages to themselves." });
+    }
+
+    // Verify both users exist
+    const sender = await User.findById(sender_id);
+    const recipient = await User.findById(recipient_id);
+
+    if (!sender) {
+      return res.status(400).json({ error: `Sender '${sender_id}' does not exist.` });
+    }
+
+    if (!recipient) {
+      return res.status(400).json({ error: `Recipient '${recipient_id}' does not exist.` });
+    }
+
+    const _id = await generateMessageId();
+
+    const newMessage = new Message({
+      _id,
+      sender_id,
+      recipient_id,
+      content,
+      date_created: new Date().toISOString()
+    });
+
+    await newMessage.save();
+    res.status(201).json(newMessage);
+
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Failed to send message." });
+  }
+});
+
+// Use PUT to mark a message as read. 
+apiRouter.put('/messages/:id/read', async (req, res) => {
+  try {
+    const msg = await Message.findById(req.params.id);
+
+    if (!msg) {
+      return res.status(404).json({ error: `Message '${req.params.id}' not found.` });
+    }
+
+    msg.is_read = true;
+    await msg.save();
+
+    res.json(msg);
+
+  } catch (err) {
+    res.status(500).json({ error: "Server error" });
+  }
+});
+
+// Use PUT to edit the contents of a message. 
+apiRouter.put('/messages/:id/edit', async (req, res) => {
+  const { id } = req.params;
+  const { new_content, editor_id } = req.body;
+
+  if (!new_content || !editor_id) {
+    return res.status(400).json({ error: "Missing required fields." });
+  }
+
+  try {
+    const message = await Message.findById(id);
+
+    if (!message) {
+      return res.status(404).json({ error: "Message not found." });
+    }
+
+    // Only the original sender can edit
+    if (message.sender_id !== editor_id) {
+      return res.status(403).json({ error: "You do not have permission to edit this message." });
+    }
+
+    // Update the message
+    message.content = new_content;
+    message.edited = true;
+    message.date_edited = new Date().toISOString();
+
+    await message.save();
+
+    res.json(message);
+
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Failed to edit message." });
+  }
+});
+
+
+// DELETE a message. 
+apiRouter.delete('/messages/:id', async (req, res) => {
+  try {
+    const deleted = await Message.findByIdAndDelete(req.params.id);
+
+    if (!deleted) {
+      return res.status(404).json({ error: `Message '${req.params.id}' not found.` });
+    }
+
+    res.json({ message: `Message '${req.params.id}' deleted successfully.`, messageData: deleted });
+
+  } catch (err) {
+    res.status(500).json({ error: "Server error" });
+  }
+});
+
 
 // ------------------ MIXED ROUTES ------------------
+
+// GET all posts for a specific user
+app.get('/users/:id/posts', async (req, res) => {
+  try {
+    const user = await User.findById(req.params.id);
+    if (!user) return res.status(404).json({ error: `User '${req.params.id}' not found.` });
+
+    const userPosts = await Post.find({ author_id: req.params.id });
+    res.json(userPosts);
+  } catch (err) {
+    res.status(500).json({ error: 'Server error' });
+  }
+});
 
 // GET all comments for a specific post (Displayed flat [not a tree] for now.)
 // Tell me if you guys want this to be converted into a tree like the /comments/:id/replies is. I wasn't sure what you wanted. 
@@ -538,19 +703,62 @@ apiRouter.get('/posts/:id/comments', async (req, res) => {
   }
 });
 
-// GET all posts for a specific user
-app.get('/users/:id/posts', async (req, res) => {
+// GET all messages to and from a specific user (With any and all other users, not just one conversation).
+// In practice, this route should only ever be used on the same user that you are logged in as.
+apiRouter.get('/messages/user/:id', async (req, res) => {
   try {
-    const user = await User.findById(req.params.id);
-    if (!user) return res.status(404).json({ error: `User '${req.params.id}' not found.` });
+    const userId = req.params.id;
 
-    const userPosts = await Post.find({ author_id: req.params.id });
-    res.json(userPosts);
+    const user = await User.findById(userId);
+    if (!user) return res.status(404).json({ error: `User '${userId}' not found.` });
+
+    const messages = await Message.find({
+      $or: [
+        { sender_id: userId },
+        { recipient_id: userId }
+      ]
+    });
+
+    res.json(messages);
+
   } catch (err) {
-    res.status(500).json({ error: 'Server error' });
+    res.status(500).json({ error: "Server error" });
   }
 });
 
+// GET all messages to and from two specific users. 
+// This one is how you'd get an actual conversation between two people. 
+apiRouter.get('/messages/conversation/:user1/:user2', async (req, res) => {
+  const { user1, user2 } = req.params;
+
+  try {
+    // Users cannot be the same
+    if (user1 === user2) {
+      return res.status(400).json({ error: "Cannot fetch a conversation with yourself." });
+    }
+
+    // Make sure both users exist
+    const u1 = await User.findById(user1);
+    const u2 = await User.findById(user2);
+
+    if (!u1) return res.status(400).json({ error: `User '${user1}' does not exist.` });
+    if (!u2) return res.status(400).json({ error: `User '${user2}' does not exist.` });
+
+    // Fetch all messages between the two
+    const messages = await Message.find({
+      $or: [
+        { sender_id: user1, recipient_id: user2 },
+        { sender_id: user2, recipient_id: user1 }
+      ]
+    }).sort({ date_created: 1 });
+
+    res.json(messages);
+
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Failed to fetch conversation." });
+  }
+});
 
 
 // ------------------ Start server ------------------
