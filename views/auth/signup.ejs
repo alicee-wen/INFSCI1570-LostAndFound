@@ -11,9 +11,7 @@
 
 <section class="signup-page">
   <h1>Sign Up</h1>
-  <% if (typeof error !== "undefined" && error) { %>
-    <p class="error"><%= error %></p>
-  <% } %>
+
   <form method="POST" action="/signup" class="auth-form">
     <input name="username" placeholder="Username" required />
     <input name="email" placeholder="Email" required />

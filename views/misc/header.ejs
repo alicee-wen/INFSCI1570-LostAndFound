@@ -4,31 +4,33 @@
     <meta charset="UTF-8" />
     <title>Lost and Found</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Frijole&family=Onest:wght@100..900&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Frijole&family=Onest:wght@100..900&display=swap"
+      rel="stylesheet"
+    />
     <link rel="stylesheet" href="/css/styles.css" />
   </head>
   <body>
     <header class="header">
       <div class="title">Lost and Found</div>
       <nav>
-        
-        <a href="/">Search</a>
+        <a href="/">Home</a>
         <a href="/posts">Posts</a>
         <% if (userId) { %>
-          <a href="/users/profile">Profile</a>
-          <form action="/logout" method="POST" class="inline-form">
-            <button>Logout</button>
-          </form>
+        <a href="/users/profile">Profile</a>
+        <form action="/logout" method="POST" class="inline-form">
+          <button>Logout</button>
+        </form>
         <% } else { %>
-          <a href="/login">Login</a>
-          <a href="/signup">Sign Up</a>
+        <a href="/login">Login</a>
+        <a href="/signup">Sign Up</a>
+        <% } %> <% if (user && user.isAdmin) { %>
+        <a href="/admin/users">Admin Dashboard</a>
         <% } %>
-        <% if (user && user.isAdmin) { %>
-  <a href="/admin/users">Admin Dashboard</a>
-<% } %>
-
       </nav>
     </header>
-    <main class="page-content">
+    <main class="page-content"></main>
+  </body>
+</html>

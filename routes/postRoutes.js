@@ -1,19 +1,18 @@
-// routes/postRoutes.js
+
 const express = require("express");
 const router = express.Router();
 const Post = require("../models/post");
-const Counter = require('../models/counter');
+const Counter = require("../models/counter");
 const multer = require("multer");
 const path = require("path");
 
-// multer storage 
+// multer storage
 const storage = multer.diskStorage({
   destination: "uploads/",
   filename: (req, file, cb) => {
     cb(null, file.originalname);
-  }
+  },
 });
-
 
 const upload = multer({ storage });
 
@@ -23,53 +22,52 @@ router.get("/", async (req, res) => {
     const posts = await Post.find().sort({ date_created: -1 });
 
     res.render("posts/main", {
-      posts,                  
-      userId: req.session.userId || null
+      posts,
+      userId: req.session.userId || null,
     });
   } catch (err) {
-    console.error(err);
+    console.log(err);
     res.status(500).send("Error loading posts.");
   }
 });
 
-// display create post form
+//  create post form
 router.get("/new", (req, res) => {
   res.render("posts/createPost", {
-    userId: req.session.userId || null
+    userId: req.session.userId || null,
   });
 });
 
 // create new post submission
 router.post("/new", upload.single("photo"), async (req, res) => {
   try {
-    const { title, description, category, location, status, photo_url } = req.body;
+    const { title, description, category, location, status, photo_url } =
+      req.body;
 
     if (!title || !description) {
-      return res.status(400).send("Title and description are required.");
+      return res.status(400).send("Title and description required.");
     }
     const _id = await generatePostId();
 
-       
     const newPost = new Post({
-        _id,
+      _id,
       title,
       description,
       category,
       location_found: location,
       status: status || "lost",
-      author_id: req.session.userId || "guest",  
+      author_id: req.session.userId || "guest",
       date_created: new Date().toISOString(),
     });
 
-
     if (req.file) {
-    newPost.photo_url = `/uploads/${req.file.filename}`;
+      newPost.photo_url = `/uploads/${req.file.filename}`;
     }
 
     await newPost.save();
     res.redirect("/posts");
   } catch (err) {
-    console.error(err);
+    console.log(err);
     res.status(500).send("Error creating post.");
   }
 });
@@ -82,10 +80,10 @@ router.get("/:id", async (req, res) => {
 
     res.render("posts/showPost", {
       post,
-      userId: req.session.userId || null
+      userId: req.session.userId || null,
     });
   } catch (err) {
-    console.error(err);
+    console.log(err);
     res.status(500).send("Error loading post.");
   }
 });
@@ -98,10 +96,10 @@ router.get("/:id/edit", async (req, res) => {
 
     res.render("posts/editPost", {
       post,
-      userId: req.session.userId || null
+      userId: req.session.userId || null,
     });
   } catch (err) {
-    console.error(err);
+    console.log(err);
     res.status(500).send("Error loading edit form.");
   }
 });
@@ -109,7 +107,8 @@ router.get("/:id/edit", async (req, res) => {
 // edit post
 router.post("/:id/edit", upload.single("photo"), async (req, res) => {
   try {
-    const { title, description, category, location, status, photo_url } = req.body;
+    const { title, description, category, location, status, photo_url } =
+      req.body;
 
     const post = await Post.findById(req.params.id);
     if (!post) return res.status(404).send("Post not found.");
@@ -121,15 +120,14 @@ router.post("/:id/edit", upload.single("photo"), async (req, res) => {
     post.status = status || "lost";
 
     if (req.file) {
-        post.photo_url = `/uploads/${req.file.filename}`;
+      post.photo_url = `/uploads/${req.file.filename}`;
     }
-
 
     await post.save();
     res.redirect(`/posts/${post._id}`);
   } catch (err) {
-    console.error(err);
-    res.status(500).send("Error updating post.");
+    console.log(err);
+    res.status(500).send("Error editing post.");
   }
 });
 
@@ -146,14 +144,11 @@ router.post("/:id/delete", async (req, res) => {
 
 module.exports = router;
 
-
-// helper 
-
-
+// helper
 
 async function generatePostId() {
   const counter = await Counter.findByIdAndUpdate(
-    'post',
+    "post",
     { $inc: { seq: 1 } },
     { new: true, upsert: true }
   );

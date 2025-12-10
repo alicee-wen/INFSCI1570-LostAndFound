@@ -4,62 +4,63 @@ const Counter = require("../models/counter");
 
 // Helper: generate sequential user IDs
 async function generateUserId() {
-    const counter = await Counter.findByIdAndUpdate(
-        "user",
-        { $inc: { seq: 1 } },
-        { new: true, upsert: true }
-    );
-    return `user${counter.seq}`;
+  const counter = await Counter.findByIdAndUpdate(
+    "user",
+    { $inc: { seq: 1 } },
+    { new: true, upsert: true }
+  );
+  return `user${counter.seq}`;
 }
 
 module.exports.showSignup = (req, res) => {
-    res.render("auth/signup");
+  res.render("auth/signup");
 };
 
 module.exports.showLogin = (req, res) => {
-    res.render("auth/login");
+  res.render("auth/login");
 };
 
 module.exports.signup = async (req, res) => {
-    try {
-        const { username, email, password } = req.body;
+  try {
+    const { username, email, password } = req.body;
 
-        if (!username || !email || !password) {
-            return res.status(400).send("All fields are required.");
-        }
-
-        const password_hash = await bcrypt.hash(password, 12);
-        const _id = await generateUserId(); // custom ID generator
-
-         const isAdmin = (email === "alice.wen2130@gmail.com"); 
-         // made myself admin to test site because I don't have access to database, 
-         // obviously wouldn't keep this in the real deployed app
-
-        const user = new User({
-            _id,
-            username,
-            email,
-            password_hash,
-            date_created: new Date().toISOString(),
-            isAdmin,
-        });
-
-        await user.save();
-
-        req.session.userId = user._id;
-        res.redirect("/users/profile");
-    } catch (err) {
-        console.log(err);
-        res.status(400).send("Signup failed. Email or username may already exist.");
+    if (!username || !email || !password) {
+      return res.status(400).send("All fields are required.");
     }
+
+    const password_hash = await bcrypt.hash(password, 12);
+    const _id = await generateUserId(); // custom ID generator
+
+    const isAdmin = email === "alicewen10@gmail.com";
+    // made myself admin to test site because I don't have access to database,
+    // obviously wouldn't keep this in the real deployed app
+    // in real scenario, would set isAdmin manually in the database
+
+    const user = new User({
+      _id,
+      username,
+      email,
+      password_hash,
+      date_created: new Date().toISOString(),
+      isAdmin,
+    });
+
+    await user.save();
+
+    req.session.userId = user._id;
+    res.redirect("/users/profile");
+  } catch (err) {
+    console.log(err);
+    res.status(400).send("Signup failed");
+  }
 };
 
 module.exports.login = async (req, res) => {
-    try {
+  try {
     const { email, password } = req.body;
 
-    console.log("LOGIN req.body:", req.body);
-    
+    console.log(req.body);
+
     if (!email || !password) {
       return res.status(400).render("login", {
         error: "Please enter both email and password.",
@@ -70,7 +71,8 @@ module.exports.login = async (req, res) => {
     const user = await User.findOne({ email });
 
     // if user doesn't exist or has no password_hash
-    if (!user || !user.password_hash) return res.status(400).send("Invalid email or password.");
+    if (!user || !user.password_hash)
+      return res.status(400).send("Invalid email or password.");
 
     // compare password with stored hash
     const valid = await bcrypt.compare(password, user.password_hash);
@@ -78,14 +80,14 @@ module.exports.login = async (req, res) => {
 
     req.session.userId = user._id;
     return res.redirect("/users/profile");
-} catch (err) {
+  } catch (err) {
     console.log(err);
     res.status(500).send("Error logging in.");
-}
-}
+  }
+};
 
 module.exports.logout = (req, res) => {
-    req.session.destroy(() => {
-        res.redirect("/login");
-    });
-}
+  req.session.destroy(() => {
+    res.redirect("/login");
+  });
+};

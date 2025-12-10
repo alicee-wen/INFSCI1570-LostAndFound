@@ -32,8 +32,8 @@
           </h3>
 
           <p id="profile-post-list-details">
-            <strong>Description:</strong> <%= post.description || "N/A" %><br/>
-            <strong>Status:</strong> <%= post.status || "N/A" %><br/>
+            <strong>Description:</strong> <%= post.description || "n/a" %><br/>
+            <strong>Status:</strong> <%= post.status || "n/a" %><br/>
           </p>
 
           <a href="/posts/<%= post._id %>/edit" class="btn " id="profile-edit-post">
@@ -53,7 +53,6 @@
     </ul>
   <% } else { %>
     <p>You haven’t made any posts yet.</p>
-    <a href="/posts/new" class="btn btn-a" id="profile-create-first">Create Your First Post</a>
   <% } %>
 
     

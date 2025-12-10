@@ -1,4 +1,3 @@
-
 document.addEventListener("DOMContentLoaded", () => {
   const form = document.getElementById("create-post-form");
   if (!form) {
@@ -24,7 +23,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         field.value = data[name];
       });
-      console.log("Draft restored");
+      console.log("draft restored");
     } catch (err) {
       console.error("Error getting saved draft:", err);
     }
@@ -35,8 +34,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const data = {};
 
     Array.from(form.elements).forEach((el) => {
-      if (!el.name) return;             
-  
+      if (!el.name) return;
 
       data[el.name] = el.value;
     });
@@ -51,13 +49,12 @@ document.addEventListener("DOMContentLoaded", () => {
   // clear draft when form submits
   form.addEventListener("submit", () => {
     localStorage.removeItem(STORAGE_KEY);
-    console.log("cleared");
+    console.log("draft cleared");
   });
 
   // geolocation API
   if (useLocationBtn && locationInput && locationStatus) {
     useLocationBtn.addEventListener("click", () => {
-
       if (!("geolocation" in navigator)) {
         console.log("Geolocation not supported.");
       }
@@ -66,17 +63,16 @@ document.addEventListener("DOMContentLoaded", () => {
         (pos) => {
           const { latitude, longitude } = pos.coords;
 
-          // Put coords into location input box 
+          // put coords into location input box
           locationInput.value = `Lat: ${latitude.toFixed(2)}, Lng: ${longitude.toFixed(2)}`;
           saveDraft();
         },
         (err) => {
-          console.error("Geolocation error:", err);
-          console.log( "Could not get your location.");
+          console.log("Could not get location");
         }
       );
     });
   } else {
-    console.log("Geolocation elements not found.");
+    console.log("Geolocation elements not found");
   }
 });

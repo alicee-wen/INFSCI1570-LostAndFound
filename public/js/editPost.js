@@ -1,4 +1,3 @@
-
 document.addEventListener("DOMContentLoaded", () => {
   const form = document.getElementById("edit-post-form");
   if (!form) {
@@ -35,8 +34,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const data = {};
 
     Array.from(form.elements).forEach((el) => {
-      if (!el.name) return;             
-  
+      if (!el.name) return;
 
       data[el.name] = el.value;
     });
@@ -57,26 +55,24 @@ document.addEventListener("DOMContentLoaded", () => {
   // geolocation API
   if (useLocationBtn && locationInput && locationStatus) {
     useLocationBtn.addEventListener("click", () => {
-
       if (!("geolocation" in navigator)) {
-        console.log("Geolocation not supported.");
+        console.log("geolocation not supported");
       }
 
       navigator.geolocation.getCurrentPosition(
         (pos) => {
           const { latitude, longitude } = pos.coords;
 
-          // Put coords into location input box 
+          // put coords into location input box
           locationInput.value = `Lat: ${latitude.toFixed(2)}, Lng: ${longitude.toFixed(2)}`;
           saveDraft();
         },
         (err) => {
-          console.error("Geolocation error:", err);
-          console.log( "Could not get your location.");
+          console.log("Could not get your location");
         }
       );
     });
   } else {
-    console.log("Geolocation elements not found.");
+    console.log("Geolocation elements not found");
   }
 });

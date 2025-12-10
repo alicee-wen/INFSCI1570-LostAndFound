@@ -1,21 +1,6 @@
 const User = require("../models/user");
 const Post = require("../models/post");
-const bcrypt = require("bcrypt"); 
-
-module.exports.profile = async (req, res) => {
-    try {
-        const user = await User.findById(req.session.userId);
-        const posts = await Post.find({ author_id: req.session.userId }).sort({ date_created: -1 });
-        if (!user) {
-            return res.redirect("/login");
-        }
-
-        res.render("users/profile", { user, posts, });
-    } catch (err) {
-        console.log(err);
-        res.status(500).send("Server error");
-    }
-};
+const bcrypt = require("bcrypt");
 
 
 
