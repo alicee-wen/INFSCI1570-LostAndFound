@@ -87,7 +87,7 @@ app.use("/comments", commentRoutes); // comment comment management
 
 
 // Use PORT from .env, default to 3000
-const PORT = process.env.PORT || 30;
+const PORT = process.env.PORT || 3000;
 
 // ------------------ Helper Functions for ID Generation ------------------
 async function generateUserId() {
