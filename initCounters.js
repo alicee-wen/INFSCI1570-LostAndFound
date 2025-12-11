@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const Counter = require('./models/counter');
 const User = require('./models/user');
 const Post = require('./models/post');
+const Comment = require('./models/comment');
 
 async function initializeCounters() {
   try {
@@ -11,9 +12,11 @@ async function initializeCounters() {
 
     const lastUser = await User.find().sort({ _id: -1 }).limit(1);
     const lastPost = await Post.find().sort({ _id: -1 }).limit(1);
+    const lastComment = await Comment.find().sort({ _id: -1 }).limit(1);
 
     const userSeq = lastUser.length ? parseInt(lastUser[0]._id.replace('user', '')) : 0;
     const postSeq = lastPost.length ? parseInt(lastPost[0]._id.replace('post', '')) : 0;
+    const commentSeq = lastComment.length ? parseInt(lastComment[0]._id.replace('comment', '')) : 0;
 
     await Counter.findByIdAndUpdate('user', { seq: userSeq }, { upsert: true });
     await Counter.findByIdAndUpdate('post', { seq: postSeq }, { upsert: true });

@@ -74,6 +74,7 @@ const authRoutes = require("./routes/authRoutes");
 const userRoutes = require("./routes/userRoutes");
 const postRoutes = require("./routes/postRoutes");
 const adminRoutes = require("./routes/adminRoutes");
+const commentRoutes = require("./routes/commentRoutes");
 
 // frontend pages
 app.use("/", frontendRouter);
@@ -82,9 +83,11 @@ app.use("/posts", postRoutes); // MVC post system
 app.use("/", authRoutes);
 app.use("/users", userRoutes); // MVC user system (profile, etc.)
 app.use("/admin", adminRoutes);
+app.use("/comments", commentRoutes); // comment comment management
+
 
 // Use PORT from .env, default to 3000
-const PORT = process.env.PORT || 3001;
+const PORT = process.env.PORT || 30;
 
 // ------------------ Helper Functions for ID Generation ------------------
 async function generateUserId() {
